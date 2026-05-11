@@ -11,6 +11,7 @@ interface SidebarProps {
   activeFilePath?: string
   onOpenFile: (path: string) => void
   onOpenFolder: () => void
+  onOpenSingleFile: () => void
 }
 
 export default function Sidebar({
@@ -22,6 +23,7 @@ export default function Sidebar({
   activeFilePath,
   onOpenFile,
   onOpenFolder,
+  onOpenSingleFile,
 }: SidebarProps) {
   if (!isOpen) return null
 
@@ -32,8 +34,17 @@ export default function Sidebar({
           {rootPath || 'Explorer'}
         </span>
         <div className={styles.headerActions}>
-          <button onClick={onOpenFolder} title="Open Folder">
-            +
+          <button
+            onClick={onOpenSingleFile}
+            title="Open File (Ctrl+Shift+O)"
+          >
+            📂
+          </button>
+          <button
+            onClick={onOpenFolder}
+            title="Open Folder (Ctrl+O)"
+          >
+            📁
           </button>
         </div>
       </div>
@@ -51,7 +62,7 @@ export default function Sidebar({
         )}
         {!loading && !error && entries.length === 0 && (
           <div className={styles.entry} style={{ color: 'var(--fg1)', fontStyle: 'italic' }}>
-            No files found. Click + to open a folder.
+            No files found. Open a folder to browse.
           </div>
         )}
         {entries.map(entry => (
@@ -112,7 +123,6 @@ function TreeEntry({ entry, depth, activeFilePath, onOpenFile }: TreeEntryProps)
     )
   }
 
-  // File entry
   const isActive = activeFilePath === entry.path
   return (
     <div

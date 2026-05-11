@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useMemo } from 'react'
 import { EditorView, keymap, placeholder, drawSelection, highlightActiveLine, lineNumbers } from '@codemirror/view'
 import { EditorState, Compartment } from '@codemirror/state'
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
@@ -6,6 +6,8 @@ import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { searchKeymap } from '@codemirror/search'
 import { wysiwygPlugin } from '../utils/wysiwyg'
 import { highlightExtension } from '../utils/highlight'
+import { renderMarkdown } from '../utils/markdown'
+import { getCodeLanguageSync } from '../utils/codeLanguages'
 import type { EditorMode } from '../types'
 import styles from '../styles/editor.module.css'
 
@@ -16,7 +18,6 @@ interface EditorProps {
   fontSize: number
 }
 
-// Everforest Dark syntax highlighting theme — inspired by Obsidian Everforest
 const everforestTheme = EditorView.theme(
   {
     '&': {
@@ -124,6 +125,11 @@ export default function Editor({ content, onChange, mode, fontSize }: EditorProp
     [onChange],
   )
 
+  const renderedHtml = useMemo(() => {
+    if (mode !== 'preview') return ''
+    return renderMarkdown(content)
+  }, [mode, content])
+
   // Initialize editor
   useEffect(() => {
     if (!editorRef.current || viewRef.current) return
@@ -142,7 +148,7 @@ export default function Editor({ content, onChange, mode, fontSize }: EditorProp
         highlightActiveLine(),
         drawSelection(),
         history(),
-        markdown({ base: markdownLanguage }),
+        markdown({ base: markdownLanguage, codeLanguages: getCodeLanguageSync }),
         highlightExtension,
         everforestTheme,
         fontSizeCompartment.current.of(fontSizeTheme(fontSize)),
@@ -171,7 +177,7 @@ export default function Editor({ content, onChange, mode, fontSize }: EditorProp
       view.destroy()
       viewRef.current = null
     }
-  }, []) // Only run on mount
+  }, [])
 
   // Update content when it changes externally (file switch)
   useEffect(() => {
@@ -198,7 +204,7 @@ export default function Editor({ content, onChange, mode, fontSize }: EditorProp
     })
   }, [fontSize])
 
-  // Handle mode changes: read-only for preview, WYSIWYG plugin toggle
+  // Handle mode changes
   useEffect(() => {
     if (!viewRef.current) return
     const isReadOnly = mode === 'preview'
@@ -211,47 +217,87 @@ export default function Editor({ content, onChange, mode, fontSize }: EditorProp
     })
   }, [mode])
 
+  // Force CodeMirror to measure when its container changes visibility
+  useEffect(() => {
+    if (!viewRef.current) return
+    const timer = setTimeout(() => {
+      viewRef.current?.requestMeasure()
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [mode])
+
+  const isPreview = mode === 'preview'
+
   return (
     <div className={styles.editorContainer}>
-      <div className={styles.editor} ref={editorRef} />
+      <div
+        className={`${styles.editor} ${isPreview ? styles.editorHidden : ''}`}
+        ref={editorRef}
+      />
+      {isPreview && (
+        <div
+          className={styles.preview}
+          style={{ fontSize: `${fontSize}px` }}
+          dangerouslySetInnerHTML={{ __html: renderedHtml }}
+        />
+      )}
     </div>
   )
 }
 
 interface EmptyEditorProps {
   onOpenFolder: () => void
+  onOpenFile: () => void
 }
 
-export function EmptyEditor({ onOpenFolder }: EmptyEditorProps) {
+export function EmptyEditor({ onOpenFolder, onOpenFile }: EmptyEditorProps) {
   return (
     <div className={styles.editorContainer}>
       <div className={styles.emptyState}>
         <h1>Ink Editor</h1>
         <p>A terminal-styled markdown editor</p>
         <div className={styles.shortcuts}>
-          <kbd>Ctrl+O</kbd><span>Open File</span>
+          <kbd>Ctrl+O</kbd><span>Open Folder</span>
+          <kbd>Ctrl+Shift+O</kbd><span>Open File</span>
           <kbd>Ctrl+B</kbd><span>Toggle Sidebar</span>
           <kbd>Ctrl+Shift+T</kbd><span>Transparency</span>
           <kbd>Ctrl+Shift+P</kbd><span>Command Palette</span>
           <kbd>Ctrl+E</kbd><span>Toggle Mode</span>
+          <kbd>Ctrl+S</kbd><span>Save File</span>
           <kbd>F11</kbd><span>Fullscreen</span>
         </div>
-        <button
-          onClick={onOpenFolder}
-          style={{
-            marginTop: '24px',
-            padding: '8px 20px',
-            background: 'var(--bg2)',
-            color: 'var(--fg)',
-            border: '1px solid var(--grey0)',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '13px',
-          }}
-        >
-          Open Folder
-        </button>
+        <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+          <button
+            onClick={onOpenFolder}
+            style={{
+              padding: '8px 20px',
+              background: 'var(--bg2)',
+              color: 'var(--fg)',
+              border: '1px solid var(--grey0)',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '13px',
+            }}
+          >
+            Open Folder
+          </button>
+          <button
+            onClick={onOpenFile}
+            style={{
+              padding: '8px 20px',
+              background: 'var(--bg2)',
+              color: 'var(--fg)',
+              border: '1px solid var(--grey0)',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '13px',
+            }}
+          >
+            Open File
+          </button>
+        </div>
       </div>
     </div>
   )

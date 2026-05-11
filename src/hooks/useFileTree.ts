@@ -35,9 +35,26 @@ export function useFileTree() {
     }
   }, [loadDirectory])
 
+  const openSingleFile = useCallback(async (onOpen: (path: string) => void) => {
+    try {
+      const selected = await open({
+        multiple: false,
+        filters: [{ name: 'Markdown / Text', extensions: ['md', 'markdown', 'mdown', 'mkd', 'txt'] }],
+      })
+      if (selected && typeof selected === 'string') {
+        onOpen(selected)
+      }
+    } catch {
+      setError('Cannot open file dialog')
+    }
+  }, [])
+
   const refreshTree = useCallback(async () => {
     if (rootPath) await loadDirectory(rootPath)
   }, [rootPath, loadDirectory])
 
-  return { rootPath, entries, loading, error, loadDirectory, openFolder, refreshTree }
+  return {
+    rootPath, entries, loading, error,
+    loadDirectory, openFolder, openSingleFile, refreshTree,
+  }
 }

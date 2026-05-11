@@ -90,6 +90,21 @@ pub fn file_exists(path: String) -> Result<bool, String> {
     Ok(Path::new(&path).exists())
 }
 
+#[tauri::command]
+pub fn create_file(path: String) -> Result<(), String> {
+    if let Some(parent) = Path::new(&path).parent() {
+        if !parent.exists() {
+            fs::create_dir_all(parent).map_err(|e| format!("Failed to create directory: {}", e))?;
+        }
+    }
+    fs::write(&path, "").map_err(|e| format!("Failed to create file: {}", e))
+}
+
+#[tauri::command]
+pub fn create_directory(path: String) -> Result<(), String> {
+    fs::create_dir_all(&path).map_err(|e| format!("Failed to create directory: {}", e))
+}
+
 // Window control commands — called from frontend via invoke()
 
 #[tauri::command]

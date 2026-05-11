@@ -28,6 +28,7 @@ export default function App() {
     loading: fileTreeLoading,
     error: fileTreeError,
     openFolder,
+    openSingleFile,
   } = useFileTree()
 
   const {
@@ -59,8 +60,13 @@ export default function App() {
     setMode(next)
   }, [settings.mode, setMode])
 
+  const handleOpenSingleFile = useCallback(() => {
+    openSingleFile(openFile)
+  }, [openSingleFile, openFile])
+
   const commands: Command[] = useMemo(() => [
     { id: 'open-folder', label: 'Open Folder', shortcut: 'Ctrl+O', action: openFolder },
+    { id: 'open-file', label: 'Open File', shortcut: 'Ctrl+Shift+O', action: handleOpenSingleFile },
     { id: 'save-file', label: 'Save File', shortcut: 'Ctrl+S', action: saveFile },
     { id: 'save-as', label: 'Save As...', shortcut: 'Ctrl+Shift+S', action: saveFileAs },
     { id: 'toggle-sidebar', label: 'Toggle Sidebar', shortcut: 'Ctrl+B', action: toggleSidebar },
@@ -68,7 +74,7 @@ export default function App() {
     { id: 'toggle-mode', label: 'Toggle Editor Mode', shortcut: 'Ctrl+E', action: toggleMode },
     { id: 'close-file', label: 'Close File', shortcut: 'Ctrl+W', action: () => activeTabIndex >= 0 && closeFile(activeTabIndex) },
     { id: 'settings', label: 'Open Settings', action: () => setSettingsOpen(true) },
-  ], [openFolder, saveFile, saveFileAs, toggleSidebar, toggleTransparency, toggleMode, closeFile, activeTabIndex])
+  ], [openFolder, handleOpenSingleFile, saveFile, saveFileAs, toggleSidebar, toggleTransparency, toggleMode, closeFile, activeTabIndex])
 
   const handleFullscreen = useCallback(async () => {
     const win = getCurrentWindow()
@@ -82,6 +88,7 @@ export default function App() {
 
   useKeyboard([
     { key: 'o', ctrl: true, handler: openFolder },
+    { key: 'o', ctrl: true, shift: true, handler: handleOpenSingleFile },
     { key: 's', ctrl: true, handler: saveFile },
     { key: 's', ctrl: true, shift: true, handler: saveFileAs },
     { key: 'b', ctrl: true, handler: toggleSidebar },
@@ -112,6 +119,7 @@ export default function App() {
           activeFilePath={activeTab?.path}
           onOpenFile={openFile}
           onOpenFolder={openFolder}
+          onOpenSingleFile={handleOpenSingleFile}
         />
 
         {activeTab ? (
@@ -122,7 +130,10 @@ export default function App() {
             fontSize={settings.fontSize}
           />
         ) : (
-          <EmptyEditor onOpenFolder={openFolder} />
+          <EmptyEditor
+            onOpenFolder={openFolder}
+            onOpenFile={handleOpenSingleFile}
+          />
         )}
       </div>
 

@@ -24,11 +24,3 @@ const md = new Remarkable({
 export function renderMarkdown(source: string): string {
   return md.render(source)
 }
-
-export function renderInlineMarkdown(source: string): string {
-  // For inline rendering, we parse markdown and strip the outer <p> tags
-  const html = md.render(source)
-  return html
-    .replace(/^<p>/, '')
-    .replace(/<\/p>\n?$/, '')
-}

@@ -5,7 +5,7 @@ import type { RangeSet } from '@codemirror/state'
 
 // Markdown syntax characters to hide on non-active lines for WYSIWYG effect
 const hiddenMarkTypes = new Set([
-  'HeadingMark',
+  'HeaderMark',
   'EmphasisMark',
   'StrongEmphasisMark',
   'CodeMark',
@@ -14,12 +14,18 @@ const hiddenMarkTypes = new Set([
   'QuoteMark',
 ])
 
-// Extra node types whose entire range should be hidden on non-active lines
-const hiddenNodeTypes = new Set([
-  'URL',
-])
+const hiddenNodeTypes = new Set(['URL'])
 
 const allHidden = new Set([...hiddenMarkTypes, ...hiddenNodeTypes])
+
+// Heading node type → level mapping
+function getHeadingLevel(typeName: string): number | null {
+  const atx = typeName.match(/^ATXHeading([1-6])$/)
+  if (atx) return parseInt(atx[1], 10)
+  const setext = typeName.match(/^SetextHeading([12])$/)
+  if (setext) return parseInt(setext[1], 10)
+  return null
+}
 
 const emptySet = new RangeSetBuilder<Decoration>().finish()
 
@@ -29,20 +35,33 @@ function buildDecorations(view: EditorView): RangeSet<Decoration> {
   if (!tree) return emptySet
 
   const builder = new RangeSetBuilder<Decoration>()
-
-  // Find the active line from primary cursor
   const cursor = state.selection.main.head
   const cursorLine = state.doc.lineAt(cursor)
 
   tree.iterate({
     enter(node) {
-      if (!allHidden.has(node.type.name)) return
+      const typeName = node.type.name
 
-      // Keep marks visible on the cursor line (source-editing mode)
-      const nodeLine = state.doc.lineAt(node.from)
-      if (nodeLine.number === cursorLine.number) return
+      // Hide syntax marks on non-active lines
+      if (allHidden.has(typeName)) {
+        const nodeLine = state.doc.lineAt(node.from)
+        if (nodeLine.number !== cursorLine.number) {
+          builder.add(node.from, node.to, Decoration.replace({}))
+        }
+      }
 
-      builder.add(node.from, node.to, Decoration.replace({}))
+      // Enlarge headings on non-active lines (WYSIWYG heading sizing)
+      const level = getHeadingLevel(typeName)
+      if (level !== null) {
+        const line = state.doc.lineAt(node.from)
+        if (line.number !== cursorLine.number) {
+          builder.add(
+            line.from,
+            line.from,
+            Decoration.line({ attributes: { class: `wysiwyg-h${level}` } }),
+          )
+        }
+      }
     },
   })
 
