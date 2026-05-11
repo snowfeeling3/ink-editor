@@ -1,0 +1,109 @@
+.titlebar {
+  display: flex;
+  align-items: center;
+  height: var(--titlebar-height);
+  background: rgba(0,0,0,0.22);
+  padding: 0 12px;
+  user-select: none;
+  -webkit-app-region: no-drag;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  position: relative;
+}
+
+/* Drag overlay — sits behind interactive elements */
+.dragOverlay {
+  position: absolute;
+  inset: 0;
+  -webkit-app-region: drag;
+  z-index: 0;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  -webkit-app-region: no-drag;
+}
+
+.dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.15s;
+  -webkit-app-region: no-drag;
+  position: relative;
+  z-index: 3;
+  display: block;
+}
+.dot:hover {
+  filter: brightness(1.25);
+  transform: scale(1.15);
+}
+.dot:active {
+  filter: brightness(0.75);
+  transform: scale(0.9);
+}
+
+.close    { background: #e67e80; box-shadow: 0 0 6px rgba(230,126,128,0.25); }
+.minimize { background: #dbbc7f; box-shadow: 0 0 6px rgba(219,188,127,0.25); }
+.maximize { background: #a7c080; box-shadow: 0 0 6px rgba(167,192,128,0.25); }
+
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--fg1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40%;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  -webkit-app-region: no-drag;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 1px;
+  position: relative;
+  z-index: 2;
+  -webkit-app-region: no-drag;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  color: var(--fg1);
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-family: var(--font-mono);
+  border-radius: 4px;
+  opacity: 0.5;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+  position: relative;
+  z-index: 3;
+  -webkit-app-region: no-drag;
+  outline: none;
+}
+.actions button:hover {
+  background: rgba(255,255,255,0.08);
+  opacity: 1;
+  color: var(--fg);
+}
+.actions button:active {
+  background: rgba(255,255,255,0.04);
+  opacity: 0.7;
+}

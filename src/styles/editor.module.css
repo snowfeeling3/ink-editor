@@ -1,0 +1,98 @@
+.editorContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(0,0,0,0.08);
+}
+
+.editor {
+  flex: 1;
+  overflow: auto;
+}
+
+.editor :global(.cm-editor) {
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: var(--font-size);
+  background: transparent;
+}
+
+.editor :global(.cm-editor .cm-scroller) {
+  font-family: var(--font-mono);
+  line-height: var(--line-height);
+  padding-top: 12px;
+}
+
+.editor :global(.cm-editor.cm-focused) {
+  outline: none;
+}
+
+.editor :global(.cm-editor .cm-gutters) {
+  background: transparent;
+  border-right: 1px solid var(--border-subtle);
+  color: rgba(255,255,255,0.15);
+  padding-right: 8px;
+}
+
+.editor :global(.cm-editor .cm-activeLine) {
+  background: rgba(255,255,255,0.03);
+}
+
+.editor :global(.cm-editor .cm-activeLineGutter) {
+  background: transparent;
+  color: var(--fg1);
+}
+
+.editor :global(.cm-editor .cm-cursor) {
+  border-left-color: var(--aqua);
+  border-left-width: 2px;
+}
+
+.editor :global(.cm-editor .cm-selectionBackground) {
+  background: var(--selection-bg) !important;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--fg1);
+  gap: 16px;
+}
+
+.emptyState h1 {
+  font-size: 26px;
+  color: var(--aqua);
+  font-weight: 400;
+  letter-spacing: -1px;
+}
+
+.emptyState p {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.emptyState .shortcuts {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 6px 24px;
+  font-size: 12px;
+}
+
+.emptyState .shortcuts kbd {
+  background: rgba(255,255,255,0.06);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  color: var(--fg);
+  font-size: 11px;
+}
+
+.emptyState .shortcuts span {
+  color: var(--fg1);
+}

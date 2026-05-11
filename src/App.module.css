@@ -1,0 +1,19 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  /* Frosted glass terminal effect */
+  background: rgba(45, 53, 59, var(--app-opacity, 0.92));
+  backdrop-filter: blur(var(--app-blur, 12px));
+  -webkit-backdrop-filter: blur(var(--app-blur, 12px));
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  /* Semi-transparent pane divider line */
+  border-top: 1px solid var(--border-pane);
+  border-bottom: 1px solid var(--border-pane);
+}

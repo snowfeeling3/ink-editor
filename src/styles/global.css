@@ -1,0 +1,161 @@
+/* ===== Everforest Dark Theme ===== */
+:root {
+  --bg0: #2d353b;
+  --bg1: #232a2e;
+  --bg2: #343f44;
+  --bg3: #3a454a;
+  --bg-dim: #293136;
+  --bg-red: #4c3743;
+
+  --fg: #d3c6aa;
+  --fg1: #9da9a0;
+
+  --red: #e67e80;
+  --orange: #e69875;
+  --yellow: #dbbc7f;
+  --green: #a7c080;
+  --aqua: #83c092;
+  --blue: #7fbbb3;
+  --purple: #d699b6;
+
+  --grey0: #4a555b;
+  --grey1: #5a656b;
+  --grey2: #859289;
+
+  --font-mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --font-size: 14px;
+  --line-height: 1.7;
+
+  --selection-bg: #543a48;
+  --titlebar-height: 32px;
+  --statusbar-height: 28px;
+  --sidebar-width: 260px;
+
+  /* Opacity — controlled dynamically */
+  --app-opacity: 0.92;
+  --app-blur: 12px;
+
+  --border-subtle: rgba(255,255,255,0.04);
+  --border-pane: rgba(255,255,255,0.06);
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  color: var(--fg);
+  background: transparent;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--fg);
+}
+
+/* Scrollbar — transparent style */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+a {
+  color: var(--blue);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: var(--font-mono);
+  background: rgba(255,255,255,0.06);
+  color: var(--aqua);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+pre code {
+  display: block;
+  padding: 12px 16px;
+  overflow-x: auto;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border-subtle);
+}
+
+blockquote {
+  border-left: 2px solid var(--blue);
+  padding-left: 14px;
+  color: var(--fg1);
+  margin: 8px 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+}
+th, td {
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  text-align: left;
+}
+th {
+  background: rgba(255,255,255,0.04);
+  font-weight: 600;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 16px 0;
+}
+
+/* ===== Highlight.js — Everforest code theme ===== */
+.hljs { color: var(--fg); background: rgba(0,0,0,0.2); }
+.hljs-keyword  { color: #d699b6; } /* purple */
+.hljs-string   { color: #a7c080; } /* green */
+.hljs-number   { color: #e69875; } /* orange */
+.hljs-comment  { color: #859289; font-style: italic; } /* grey2 */
+.hljs-function { color: #7fbbb3; } /* blue */
+.hljs-type     { color: #dbbc7f; } /* yellow */
+.hljs-attr     { color: #83c092; } /* aqua */
+.hljs-variable { color: var(--fg); }
+.hljs-literal  { color: #e67e80; } /* red */
+.hljs-params   { color: var(--fg); }
+.hljs-built_in { color: #e69875; } /* orange */
+.hljs-title    { color: #7fbbb3; } /* blue */
+.hljs-meta     { color: #dbbc7f; } /* yellow */
+.hljs-tag      { color: #e67e80; } /* red */
+.hljs-name     { color: #e67e80; } /* red */
+.hljs-attribute { color: #dbbc7f; } /* yellow */
+.hljs-selector-class { color: #a7c080; } /* green */
+.hljs-selector-tag   { color: #e67e80; } /* red */
+.hljs-addition  { color: #a7c080; } /* green */
+.hljs-deletion  { color: #e67e80; } /* red */

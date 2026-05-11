@@ -1,0 +1,57 @@
+.statusbar {
+  display: flex;
+  align-items: center;
+  height: var(--statusbar-height);
+  padding: 0 12px;
+  background: rgba(0,0,0,0.18);
+  font-size: 11px;
+  color: var(--fg1);
+  flex-shrink: 0;
+  user-select: none;
+  gap: 16px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.modeIndicator {
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.modeWysiwyg {
+  background: rgba(167, 192, 128, 0.25);
+  color: var(--green);
+}
+
+.modeSource {
+  background: rgba(127, 187, 179, 0.25);
+  color: var(--blue);
+}
+
+.modePreview {
+  background: rgba(214, 153, 182, 0.25);
+  color: var(--purple);
+}
+
+.transparency {
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+.transparency:hover {
+  opacity: 1;
+}

@@ -1,0 +1,100 @@
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: 180px;
+  height: 100%;
+  background: rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.headerTitle {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--fg1);
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.headerActions {
+  display: flex;
+  gap: 2px;
+}
+
+.headerActions button {
+  background: none;
+  border: none;
+  color: var(--fg1);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  opacity: 0.5;
+}
+.headerActions button:hover {
+  background: rgba(255,255,255,0.06);
+  opacity: 1;
+}
+
+.tree {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px 0;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--fg1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.1s;
+}
+.entry:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--fg);
+}
+
+.entryActive {
+  background: rgba(255,255,255,0.06);
+  color: var(--fg);
+}
+
+.icon {
+  margin-right: 6px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.arrow {
+  margin-right: 4px;
+  font-size: 8px;
+  flex-shrink: 0;
+  color: var(--fg1);
+  transition: transform 0.12s;
+}
+.arrowOpen {
+  transform: rotate(90deg);
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
